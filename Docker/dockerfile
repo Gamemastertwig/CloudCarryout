@@ -1,0 +1,25 @@
+FROM amazonlinux:latest
+
+# Install AWS CLI
+RUN echo "Installing AWS CLI..."
+RUN yum -y install which unzip aws-cli
+# RUN echo "Verifying AWS CLI Install..."
+# RUN aws --version
+
+# Install Terraform
+RUN echo "Installing Terraform..."
+RUN curl -O https://releases.hashicorp.com/terraform/0.12.26/terraform_0.12.26_linux_amd64.zip
+RUN unzip terraform_0.12.26_linux_amd64.zip -d /usr/bin/
+# RUN echo "Verifing Terraform Install..."
+# RUN terraform -v
+
+# Copy over the test Terraform and setup script
+WORKDIR /temp
+COPY testing.tf /temp
+COPY setup.sh /temp
+RUN chmod +x setup.sh
+
+# ENTRYPOINT [ "/bin/bash" ]
+ENTRYPOINT [ "./setup.sh" ]
+
+
