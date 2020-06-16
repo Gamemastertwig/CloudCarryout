@@ -59,7 +59,7 @@ func Handler(event map[string]interface{}) (string, error) {
 	//Upload request json
 	_, err = up.Upload(&s3manager.UploadInput{
 		Bucket: aws.String("jenkins-cicd-s3"),
-		Key:    aws.String("key"),
+		Key:    aws.String("job.json"),
 		Body:   bytes.NewReader(mssg),
 	})
 
