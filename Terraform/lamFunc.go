@@ -16,14 +16,40 @@ func main() {
 	lambda.Start(Handler)
 }
 
+type request struct {
+	Method string
+	Template string
+}
+type params struct {
+	Template string
+}
+
 //Handler request from Lambda
-func Handler(request map[string]interface{}) (string, error) {
+func Handler(event map[string]interface{}) (string, error) {
+
 
 	//Parse request
-	mssg, err := json.Marshal(request)
+	mssg, err := json.Marshal(event)
 	if err != nil {
 		fmt.Println(err.Error())
-		return "Request cannot be parsed", errors.New("Error: cannot parse request")
+		return "Request cannot be parsed", errors.New("Error: cannot parse request event unmarshal")
+	}	
+	parm := params{}
+
+	err = json.Unmarshal(mssg, &parm)
+	if err != nil {
+		fmt.Println(err.Error())
+		return "Request cannot be parsed", errors.New("Error: cannot parse request event unmarshal")
+	}
+	req := request{
+		Method: "request",
+		Template: parm.Template,
+	}
+
+	mssg, err = json.Marshal(req)
+	if err != nil {
+		fmt.Println(err.Error())
+		return "Request cannot be parsed", errors.New("Error: cannot parse request event unmarshal")
 	}
 
 	//Create new session and uploader
@@ -36,5 +62,6 @@ func Handler(request map[string]interface{}) (string, error) {
 		Key:    aws.String("key"),
 		Body:   bytes.NewReader(mssg),
 	})
-	return "woot", nil
+
+	return string("Request has been deposited"), nil
 }
