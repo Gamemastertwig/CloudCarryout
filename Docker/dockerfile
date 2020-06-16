@@ -15,11 +15,34 @@ RUN unzip terraform_0.12.26_linux_amd64.zip -d /usr/bin/
 
 # Copy over the test Terraform and setup script
 WORKDIR /temp
-COPY testing.tf /temp
 COPY setup.sh /temp
 RUN chmod +x setup.sh
 
-# ENTRYPOINT [ "/bin/bash" ]
-ENTRYPOINT [ "./setup.sh" ]
+# make terraform dir to hold scripts
+RUN mkdir terraform
 
+# transfer terraform files to perspective dir
+WORKDIR /temp/terraform
+
+# webApp
+RUN mkdir webApp
+# COPY /Terraform/webApp/* /temp/terraform/webApp/
+WORKDIR /temp/terraform/webApp
+RUN curl -O https://github.com/Gamemastertwig/CloudCarryout/blob/master/Terraform/webApp/EC2Linux.tf
+RUN curl -O https://github.com/Gamemastertwig/CloudCarryout/blob/master/Terraform/webApp/loadBalancer.tf
+
+# windowsApp
+
+# msmq
+
+# temp (remove later)
+WORKDIR /temp/terraform
+RUN mkdir testing
+COPY testing.tf /temp/terraform/testing
+
+# return to temp workdir
+WORKDIR /temp
+
+ENTRYPOINT [ "/bin/bash" ]
+# ENTRYPOINT [ "./setup.sh" ]
 
