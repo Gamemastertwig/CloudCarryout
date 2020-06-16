@@ -14,7 +14,7 @@ func main() {
 }
 
 //Handler request from Lambda
-func Handler(request map[string]interface{}) (string, error) {
+func Handler() (string, error) {
 
 	svc := batch.New(session.New())
 	input := &batch.SubmitJobInput{
