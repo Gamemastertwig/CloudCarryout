@@ -2,5 +2,3 @@ Docker/notes.txt
 go.mod
 go.sum
 s3Upload.sh
-zipMain.sh
-updateLambda.sh
