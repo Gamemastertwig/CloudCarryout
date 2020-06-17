@@ -11,7 +11,7 @@ resource "aws_db_instance" "windb" {
     multi_az = "false"
     backup_retention_period = 10
 
-    vpc_security_group_ids = ["${aws_security_group.awdb_sec.id}"]
+    vpc_security_group_ids = ["${aws_security_group.windbsec.id}"]
     parameter_group_name = "windbpar"
     db_subnet_group_name = "windbsub"
 
@@ -24,7 +24,7 @@ resource "aws_db_parameter_group" "windbpar"{
 
 resource "aws_db_subnet_group" "windbsub"{
     name = "windbsub"
-    subnet_ids = ["${aws_subnet.winsub.id}"]
+    subnet_ids = ["${aws_subnet.winsub.id}","${aws_subnet.winsub2.id}"]
 }
 
 resource "aws_security_group" "windbsec" {
