@@ -1,21 +1,45 @@
 provider "aws" {}
 
-resource "aws_ami_copy" "linux" {
-  name              = "CloudCarryout_linux_ami"
-  description       = "A copy of ami-0e34e7b9ca0ace12d"
-  source_ami_id     = "ami-0e34e7b9ca0ace12d"
-  source_ami_region = "us-west-2"
-
-  tags = {
-    Name = "CloudCarryout"
-  }
-}
-
 resource "aws_instance" "web_server" {
-    ami = "${aws_ami_copy.linux.id}"
+    ami = "ami-0e84e211558a022c0"
     instance_type = "t2.micro"
 
-    
+    subnet_id = "${aws_subnet.sub1.id}"
+    vpc_security_group_ids = ["${aws_security_group.lbGroup.id}"]
+}
+
+resource "aws_security_group" "lbGroup" {
+  vpc_id = "${aws_vpc.vpc.id}"
+  description = "Allow traffic on port 80 and ssh on 22"
+
+  //traffic access
+  ingress {
+    description = "http from lb"
+    from_port   = 80
+    to_port     = 80
+    protocol =   "tcp"
+    security_groups = ["${aws_security_group.traffic.id}"]
+
+    //cidr_blocks =  [aws_vpc.vpc.cidr_block]
+  }
+
+    //ssh ingress
+    ingress {
+    description = "ssh access"
+    from_port   = 22
+    to_port     = 22
+    protocol =   "tcp"
+
+    cidr_blocks =  ["0.0.0.0/0"]
+  }
+
+  //traffic egress
+  egress {
+    from_port       = 0
+    to_port         = 0
+    protocol        = "tcp"
+    cidr_blocks     = ["0.0.0.0/0"]
+  }
 }
 
 output "instance_ip" {
