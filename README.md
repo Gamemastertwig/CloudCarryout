@@ -8,25 +8,26 @@ Orders are placed using json and AWS API Gateway
 {"template":"msmq"} -> Provisions a SQS, and an S3 bucket
 
 ## Prequesits
-IAM User: 
+IAM User:
 Any user with permisions to create EC2, DBs, VPCs, etc. will do. If you do not have one you will need to create the user in the IAM console.
     You will need both their Access Key and Secret Key
 
-IAM Role: 
+IAM Role:
 Create a new roll called `LambdaS3Permissions`
 It needs AmazonS3FullAccess and AWSLambdaFullAccess polocies applyed
 
 AWS S3 Bucket:
+Bucket need to store json.
 
 ## Need Setup
 **AWS Lambda Function**
-**- cloudComputeApiLambda (Go)**
+- cloudComputeApiLambda (Go)
 
-	This lambda function was written in Go. 
-	
-	There are two items that must be changed in order to start the lambda function. The first is inside the go code, AWS_BUCKET must be changed to reflect the bucket that you would like the batch job to pull from. Note: this does not change the bucket the batch job pulls from. That resource must be changed in the following section, AWS Lambda Function. 
-	
-	The second item that must be changed is inside apiLambdaSart.sh. The ARN in this script needs to be updated with the ARN of the IAM that was created for the two Lambda functions. Once again, ensure that this IAM role as full s3 permissions for this to work. 
+	This lambda function was written in Go.
+
+	There are two items that must be changed in order to start the lambda function. The first is inside the go code, AWS_BUCKET must be changed to reflect the bucket that you would like the batch job to pull from. Note: this does not change the bucket the batch job pulls from. That resource must be changed in the following section, AWS Lambda Function.
+
+	The second item that must be changed is inside apiLambdaSart.sh. The ARN in this script needs to be updated with the ARN of the IAM that was created for the two Lambda functions. Once again, ensure that this IAM role as full s3 permissions for this to work.
 
 	Now that those two items are updated, follow the following steps inside of lambdaFuncs > api-lambda folder in order to start the lambda function.
 	- `go mod init qpi-lambda`
@@ -37,32 +38,32 @@ AWS S3 Bucket:
 
 **AWS API Gateway**
 
-	The following steps are to set up a restful AWS API Gateway connected to the previous Lambda function. Follow these steps, starting from the `Choose API Type` screene
-	- Find `Rest API` and click `Build`
-	- Ensure protocol is on `REST`, and `New API` has been selected
-	- Enter the name you would like, along with a description and make sure the `Endpoint Type` is `Regional`
-	- Click `Create`
-	- You should now be on the `Resources` screne
-	- Click `Actions` > `Create Resource`
-	- Name the resource `request` this will update the path, and then click `Create Resource`
-	- Back on the `Resources` page, click `Actions` > `Create Method`
-	- Click the `drop down` and then select `POST` click the checkmark
-	- Integration type should be `Lambda Function` and region should be whatever region the Lambda function was created in
-	- Search for the Lambda function in the `Lambda Function` box and click `save` then `ok` to give the API Gateway permissions
-	- You should now be on the `Method Execution` screen
-	- Click `test`
-	- In `Request Body`, enter whatever template you whould like to envoke. JSON format must be used here. For example, {"template":"webApp"}
-	- The following templates are supported: `webApp`, `windowsApp`, `msmq`
+The following steps are to set up a restful AWS API Gateway connected to the previous Lambda function. Follow these steps, starting from the `Choose API Type` screene
+- Find `Rest API` and click `Build`
+- Ensure protocol is on `REST`, and `New API` has been selected
+- Enter the name you would like, along with a description and make sure the `Endpoint Type` is `Regional`
+- Click `Create`
+- You should now be on the `Resources` screne
+- Click `Actions` > `Create Resource`
+- Name the resource `request` this will update the path, and then click `Create Resource`
+- Back on the `Resources` page, click `Actions` > `Create Method`
+- Click the `drop down` and then select `POST` click the checkmark
+- Integration type should be `Lambda Function` and region should be whatever region the Lambda function was created in
+- Search for the Lambda function in the `Lambda Function` box and click `save` then `ok` to give the API Gateway permissions
+- You should now be on the `Method Execution` screen
+- Click `test`
+- In `Request Body`, enter whatever template you whould like to envoke. JSON format must be used here. For example, {"template":"webApp"}
+- The following templates are supported: `webApp`, `windowsApp`, `msmq`
 
 **AWS Lambda Function**
-**- trigger-aws-batch-job (Go)**
+- trigger-aws-batch-job (Go)
 
 	This lambda function was written in Go. You can apply it to your pipeline by running the following commands
 	in the lambdaFuncs > trigger-batch folder.
 	`go mod init trigger-batch`
 	`./zipMain.sh`
 	If first time running, ie: function does not already exist in your AWS environment.
-    edit `lambdaStart.sh` and replace `[YOURAWSIDNUM]` with you AWS Account ID Number (can be found on bottom left of IAM window), make sure to remove the []s as well.
+	Edit `lambdaStart.sh` and replace `[YOURAWSIDNUM]` with you AWS Account ID Number (can be found on bottom left of IAM window), make sure to remove the []s as well.
 	run `./lambdaStart.sh`
 	Else
 	run `./updateLambda.sh`
@@ -79,6 +80,7 @@ AWS S3 Bucket:
 	- Save
 
 **AWS Batch**
+
 Each section below should be completed in order. You can change the names suggested but if you do you will need to modify files in repo before setting them up
 
 - Compute environments
@@ -143,6 +145,6 @@ It setups the environment need to deploy the Terraform scripts and provision the
 
 Example:
 ```shell
-$ docker run -it --env AWS_ACCESS_KEY_ID=xxxxxxxxxxxxxxxxxx --env AWS_SECRET_ACCESS_KEY=xxxxxxxxxxxxxxxxxxxx --env AWS_BUCKET=brandonlocker-test --env FILE_TO_WATCH=jobs/job.json --env AWS_REGION=us-east-1 brandonlocker/cloudcarryout
+$ docker run -it --env AWS_ACCESS_KEY_ID=xxxxxxxxxxxxxxxxxx --env AWS_SECRET_ACCESS_KEY=xxxxxxxxxxxxxxxxxxxx --env AWS_BUCKET=myBucket --env FILE_TO_WATCH=jobs/job.json --env AWS_REGION=us-east-1 brandonlocker/cloudcarryout
 ```
-Also the file to watch will need to be stored in the s3 bucket refrenced in the env variable or the script running will fail. 
+Also the file to watch will need to be stored in the s3 bucket refrenced in the env variable or the script running will fail.
