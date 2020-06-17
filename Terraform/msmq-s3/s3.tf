@@ -6,3 +6,6 @@ resource "aws_s3_bucket" "quebucket" {
         name = "quebucket"
     }
 }
+
+
+

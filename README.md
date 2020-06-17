@@ -11,11 +11,52 @@ IAM Role: LambdaS3Permissions
 AWS S3 Bucket:
 
 ## Need Setup
-AWS API Gateway
-
-
 AWS Lambda Function
 - cloudComputeApiLambda (G0)
+
+	This lambda function was written in Go. 
+	
+	There are two items that must be changed in order to start the lambda function. The first is inside the go code, AWS_BUCKET must be changed to reflect the bucket that you would like the batch job to pull from. Note: this does not change the bucket the batch job pulls from. That resource must be changed in the following section, AWS Lambda Function. 
+	
+	The second item that must be changed is inside apiLambdaSart.sh. The ARN in this script needs to be updated with the ARN of the IAM that was created for the two Lambda functions. Once again, ensure that this IAM role as full s3 permissions for this to work. 
+
+	Now that those two items are updated, follow the following steps inside of lambdaFuncs > api-lambda folder in order to start the lambda function.
+	- `go mod init qpi-lambda`
+	- `./zipMain.sh`
+	- `./apiLambdaStart`
+
+	The Lambda function should now be started. In order to update the Lambda, run `./zipMain.sh` and then `./updateLambda.sh`
+
+- AWS API Gateway
+
+	The following steps are to set up a restful AWS API Gateway connected to the previous Lambda function. Follow these steps, starting from the `Choose API Type` screene
+	- Find `Rest API` and click `Build`
+	- Ensure protocol is on `REST`, and `New API` has been selected
+	- Enter the name you would like, along with a description and make sure the `Endpoint Type` is `Regional`
+	- Click `Create`
+	- You should now be on the `Resources` screne
+	- Click `Actions` > `Create Resource`
+	- Name the resource `request` this will update the path, and then click `Create Resource`
+	- Back on the `Resources` page, click `Actions` > `Create Method`
+	- Click the `drop down` and then select `POST` click the checkmark
+	- Integration type should be `Lambda Function` and region should be whatever region the Lambda function was created in
+	- Search for the Lambda function in the `Lambda Function` box and click `save` then `ok` to give the API Gateway permissions
+	- You should now be on the `Method Execution` screen
+	- Click `test`
+	- In `Request Body`, enter whatever template you whould like to envoke. JSON format must be used here. For example, {"template":"webApp"}
+	- The following templates are supported: `webApp`, `windowsApp`, `msmq`
+
+
+
+
+
+
+	
+
+	
+
+
+
 
 
 

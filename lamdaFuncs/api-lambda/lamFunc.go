@@ -24,6 +24,7 @@ type params struct {
 	Template string
 }
 
+
 //Handler request from Lambda
 func Handler(event map[string]interface{}) (string, error) {
 
