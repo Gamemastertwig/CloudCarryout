@@ -3,15 +3,11 @@ FROM amazonlinux:latest
 # Install AWS CLI
 RUN echo "Installing AWS CLI..."
 RUN yum -y install which unzip aws-cli
-# RUN echo "Verifying AWS CLI Install..."
-# RUN aws --version
 
 # Install Terraform
 RUN echo "Installing Terraform..."
 RUN curl -O https://releases.hashicorp.com/terraform/0.12.26/terraform_0.12.26_linux_amd64.zip
 RUN unzip terraform_0.12.26_linux_amd64.zip -d /usr/bin/
-# RUN echo "Verifing Terraform Install..."
-# RUN terraform -v
 
 # Copy over the test Terraform and setup script
 WORKDIR /temp
@@ -24,25 +20,28 @@ RUN mkdir terraform
 # transfer terraform files to perspective dir
 WORKDIR /temp/terraform
 
-# webApp
+# make dir(s)
 RUN mkdir webApp
-# COPY /Terraform/webApp/* /temp/terraform/webApp/
+RUN mkdir windowsApp
+RUN mkdir msmq
+
+# webApp
 WORKDIR /temp/terraform/webApp
 RUN curl -O https://github.com/Gamemastertwig/CloudCarryout/blob/master/Terraform/webApp/EC2Linux.tf
 RUN curl -O https://github.com/Gamemastertwig/CloudCarryout/blob/master/Terraform/webApp/loadBalancer.tf
+RUN curl -O https://github.com/Gamemastertwig/CloudCarryout/blob/master/Terraform/webApp/sqlLin.tf
 
 # windowsApp
+WORKDIR /temp/terraform/windowsApp
+RUN curl -O https://github.com/Gamemastertwig/CloudCarryout/blob/master/Terraform/windowsApp/ec2Win.tf
+RUN curl -O https://github.com/Gamemastertwig/CloudCarryout/blob/master/Terraform/windowsApp/sqlWin.tf
 
 # msmq
-
-# temp (remove later)
-WORKDIR /temp/terraform
-RUN mkdir testing
-COPY testing.tf /temp/terraform/testing
+WORKDIR /temp/terraform/msmq
+RUN curl -O https://github.com/Gamemastertwig/CloudCarryout/blob/master/Terraform/msmq-s3/que.tf
+RUN curl -O https://github.com/Gamemastertwig/CloudCarryout/blob/master/Terraform/msmq-s3/s3.tf
 
 # return to temp workdir
 WORKDIR /temp
 
-ENTRYPOINT [ "/bin/bash" ]
-# ENTRYPOINT [ "./setup.sh" ]
-
+ENTRYPOINT [ "./setup.sh" ]
