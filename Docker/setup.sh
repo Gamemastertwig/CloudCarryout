@@ -1,11 +1,9 @@
 #!/bin/bash
 
+# set up AWS CLI
 aws configure set aws_access_key_id ${AWS_ACCESS_KEY_ID}
 aws configure set aws_secret_access_key ${AWS_SECRET_ACCESS_KEY}
-
-# temp for testing
-# AWS_BUCKET="brandonlocker-test"
-# FILE_TO_WATCH="jobs/job.json"
+aws configure set default.region ${AWS_REGION}
 
 # code to determine which script to run
 # get json from s3 bucket
@@ -27,6 +25,7 @@ func_terraform() {
     cd terraform/${folder}
     terraform init
     terraform apply -auto-approve
+    aws s3 rm s3://${AWS_BUCKET}/${FILE_TO_WATCH}
     exit 0
 }
 
@@ -56,4 +55,5 @@ fi
 
 # no valid selection
 echo "No valid selection found, no resources provisioned."
+aws s3 rm s3://${AWS_BUCKET}/${FILE_TO_WATCH}
 exit 1
