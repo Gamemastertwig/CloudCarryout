@@ -2,11 +2,13 @@
 A system for ordering infrastructure from AWS based on package needed by the user.
 
 ## Prequesits
-IAM User: Any user with permisions to create EC2, DBs, VPCs, etc. will do. If you do not have one you will need to create the user in the IAM console.
+IAM User: 
+Any user with permisions to create EC2, DBs, VPCs, etc. will do. If you do not have one you will need to create the user in the IAM console.
     You will need both their Access Key and Secret Key
 
-IAM Role: LambdaS3Permissions
-
+IAM Role: 
+Create a new roll called `LambdaS3Permissions`
+It needs AmazonS3FullAccess and AWSLambdaFullAccess polocies applyed
 
 AWS S3 Bucket:
 
@@ -45,20 +47,6 @@ AWS Lambda Function
 	- Click `test`
 	- In `Request Body`, enter whatever template you whould like to envoke. JSON format must be used here. For example, {"template":"webApp"}
 	- The following templates are supported: `webApp`, `windowsApp`, `msmq`
-
-
-
-
-
-
-	
-
-	
-
-
-
-
-
 
 **AWS Lambda Function**
 - trigger-aws-batch-job (Go)
@@ -135,3 +123,18 @@ Each section below should be completed in order. You can change the names sugges
 **Terraform Scripts**
 
 **Dockerfile**
+
+The dockerfile is the blueprint for the docker image stored at https://hub.docker.com/repository/docker/brandonlocker/cloudcarryout.
+It setups the environment need to deploy the Terraform scripts and provision the resources. The environment includes AWS CLI and Terraform installations. The following environtmental variables are needed for the image to work.
+
+- AWS_REGION = us-east-1 (region you want the resources provisioned in)
+- AWS_ACCESS_KEY_ID = ABCD...... (this needs to be the access key for the IAM user with permissions to provision the resources)
+- AWS_SECRET_ACCESS_KEY = dka2jd1.... (secret key for IAM user above)
+- AWS_BUCKET = myBucket (name of the bucket the job.json is being saved in)
+- FILE_TO_WATCH = jobs/job.json (file holding the json that is used to determine what resources to deploy)
+
+Example:
+```shell
+$ docker run -it --env AWS_ACCESS_KEY_ID=xxxxxxxxxxxxxxxxxx --env AWS_SECRET_ACCESS_KEY=xxxxxxxxxxxxxxxxxxxx --env AWS_BUCKET=brandonlocker-test --env FILE_TO_WATCH=jobs/job.json --env AWS_REGION=us-east-1 brandonlocker/cloudcarryout
+```
+Also the file to watch will need to be stored in the s3 bucket refrenced in the env variable or the script running will fail. 
