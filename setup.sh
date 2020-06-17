@@ -8,7 +8,6 @@ aws configure set default.region ${AWS_REGION}
 # code to determine which script to run
 # get json from s3 bucket
 aws s3 cp s3://${AWS_BUCKET}/${FILE_TO_WATCH} .
-
 if [[ $? -eq 0 ]]
 then
     echo "Job found!"
