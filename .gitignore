@@ -1,4 +1,8 @@
-Docker/notes.txt
+notes.txt
 go.mod
 go.sum
 s3Upload.sh
+.terraform
+.terraform.tfstate.lock.info
+terraform.tfstate
+terraform.tfstate.backup
