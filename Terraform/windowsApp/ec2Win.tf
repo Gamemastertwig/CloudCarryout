@@ -10,7 +10,7 @@ resource "aws_instance" "winApp" {
     subnet_id = "${aws_subnet.winsub.id}"
     vpc_security_group_ids = ["${aws_security_group.winsec.id}"]
     associate_public_ip_address = true
-    key_name = "temp"
+    //key_name = "temp"
 
     lifecycle {
       create_before_destroy = true

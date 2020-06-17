@@ -1,5 +1,4 @@
 resource "aws_db_instance" "windb" {
-    name = "windb"
     allocated_storage = 10
     max_allocated_storage = 40
     storage_type = "gp2"
