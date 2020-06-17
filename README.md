@@ -2,9 +2,11 @@
 A system for ordering infrastructure from AWS based on package needed by the user.
 
 ## Prequesits
-IAM User:
+IAM User: Any user with permisions to create EC2, DBs, VPCs, etc. will do. If you do not have one you will need to create the user in the IAM console.
+    You will need both their Access Key and Secret Key
 
 IAM Role: LambdaS3Permissions
+
 
 AWS S3 Bucket:
 
@@ -25,6 +27,7 @@ AWS Lambda Function
 	`go mod init trigger-batch`
 	`./zipMain.sh`
 	If first time running, ie: function does not already exist in your AWS environment.
+    edit `lambdaStart.sh` and replace `[YOURAWSIDNUM]` with you AWS Account ID Number (can be found on bottom left of IAM window), make sure to remove the []s as well.
 	run `./lambdaStart.sh`
 	Else
 	run `./updateLambda.sh`
