@@ -1,6 +1,6 @@
 provider "aws" {}
 
-resource "aws_instance" "winApp {
+resource "aws_instance" "winApp" {
     ami = "ami-0e84e211558a022c0"
     instance_type = "t2.micro"
 
@@ -15,8 +15,8 @@ resource "aws_security_group" "winsec" {
   //user access
   ingress {
     description = "Accessing the app"
-    from_port   = 9000
-    to_port     = 8000
+    from_port   = 8000
+    to_port     = 9000
     protocol =   "tcp"
     cidr_blocks =  ["0.0.0.0/0"]
   }
@@ -41,7 +41,7 @@ resource "aws_security_group" "winsec" {
 }
 
 output "instance_ip" {
-    value=aws_instance.web_server.public_ip
+    value=aws_instance.winApp.public_ip
 }
 
 resource "aws_vpc" "winvpc" {
@@ -53,7 +53,7 @@ resource "aws_vpc" "winvpc" {
   }
 }
 
-resource "aws_internet_gateway" "wingw"{
+resource "aws_internet_gateway" "winApp"{
   vpc_id = "${aws_vpc.winvpc.id}"
 }
 
@@ -61,6 +61,16 @@ resource "aws_subnet" "winsub"{
   vpc_id = "${aws_vpc.winvpc.id}"
   cidr_block = "170.170.2.0/24"
   availability_zone = "us-east-2b"
+
+  tags = {
+    name = "winsub"
+  }
+}
+
+resource "aws_subnet" "winsub2"{
+  vpc_id = "${aws_vpc.winvpc.id}"
+  cidr_block = "170.170.1.0/24"
+  availability_zone = "us-east-2c"
 
   tags = {
     name = "winsub"
