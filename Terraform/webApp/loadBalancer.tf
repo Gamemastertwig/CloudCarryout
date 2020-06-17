@@ -88,4 +88,8 @@ resource "aws_security_group" "traffic" {
   }
 }
 
+output "dns_name" {
+    value=aws_lb.webAppLb.dns_name
+}
+
 
