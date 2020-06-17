@@ -1,6 +1,12 @@
 # CloudCarryout
 A system for ordering infrastructure from AWS based on package needed by the user.
 
+Orders are placed using json and AWS API Gateway
+
+{"template":"webApp"} -> Provisions an t2.micro Linux EC2, an RDS database, and a load balancer on their own VPC
+{"template":"windowsApp"} -> Provisions an t2.micro Windows EC2, and an RDS database on their own VPC
+{"template":"msmq"} -> Provisions a SQS, and an S3 bucket
+
 ## Prequesits
 IAM User: 
 Any user with permisions to create EC2, DBs, VPCs, etc. will do. If you do not have one you will need to create the user in the IAM console.
@@ -13,8 +19,8 @@ It needs AmazonS3FullAccess and AWSLambdaFullAccess polocies applyed
 AWS S3 Bucket:
 
 ## Need Setup
-AWS Lambda Function
-- cloudComputeApiLambda (G0)
+**AWS Lambda Function**
+**- cloudComputeApiLambda (Go)**
 
 	This lambda function was written in Go. 
 	
@@ -29,7 +35,7 @@ AWS Lambda Function
 
 	The Lambda function should now be started. In order to update the Lambda, run `./zipMain.sh` and then `./updateLambda.sh`
 
-- AWS API Gateway
+**AWS API Gateway**
 
 	The following steps are to set up a restful AWS API Gateway connected to the previous Lambda function. Follow these steps, starting from the `Choose API Type` screene
 	- Find `Rest API` and click `Build`
@@ -49,7 +55,7 @@ AWS Lambda Function
 	- The following templates are supported: `webApp`, `windowsApp`, `msmq`
 
 **AWS Lambda Function**
-- trigger-aws-batch-job (Go)
+**- trigger-aws-batch-job (Go)**
 
 	This lambda function was written in Go. You can apply it to your pipeline by running the following commands
 	in the lambdaFuncs > trigger-batch folder.
@@ -120,7 +126,9 @@ Each section below should be completed in order. You can change the names sugges
 	Are called by the trigger-aws-batch-job lambda function
 
 ## Provided (but may need edited)
+
 **Terraform Scripts**
+[insert list later]
 
 **Dockerfile**
 
