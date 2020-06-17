@@ -2,14 +2,19 @@ provider "aws" {}
 
 resource "aws_instance" "winApp" {
     //east1 ami
-    ami = ami-05bb2dae0b1de90b3
+    //ami = "ami-05bb2dae0b1de90b3"
     //east2 ami
-    //ami = "ami-0a83d9223efc49d62"
+    ami = "ami-0a83d9223efc49d62"
     instance_type = "t2.micro"
 
     subnet_id = "${aws_subnet.winsub.id}"
     vpc_security_group_ids = ["${aws_security_group.winsec.id}"]
     associate_public_ip_address = true
+    key_name = "temp"
+
+    lifecycle {
+      create_before_destroy = true
+    }
 }
 
 resource "aws_security_group" "winsec" {
@@ -64,7 +69,7 @@ resource "aws_internet_gateway" "winApp"{
 resource "aws_subnet" "winsub"{
   vpc_id = "${aws_vpc.winvpc.id}"
   cidr_block = "170.170.2.0/24"
-  availability_zone = "us-east-2b"
+  availability_zone = "us-east-1b"
 
   tags = {
     name = "winsub"
@@ -74,7 +79,7 @@ resource "aws_subnet" "winsub"{
 resource "aws_subnet" "winsub2"{
   vpc_id = "${aws_vpc.winvpc.id}"
   cidr_block = "170.170.1.0/24"
-  availability_zone = "us-east-2c"
+  availability_zone = "us-east-1c"
 
   tags = {
     name = "winsub"

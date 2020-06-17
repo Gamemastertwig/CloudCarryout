@@ -25,7 +25,7 @@ resource "aws_internet_gateway" "appgw"{
 resource "aws_subnet" "sub1"{
   vpc_id = "${aws_vpc.vpc.id}"
   cidr_block = "170.170.2.0/24"
-  availability_zone = "us-east-2b"
+  availability_zone = "us-east-1b"
 
   tags = {
     name = "sub1"
@@ -35,7 +35,7 @@ resource "aws_subnet" "sub1"{
 resource "aws_subnet" "sub2"{
   vpc_id = "${aws_vpc.vpc.id}"
   cidr_block = "170.170.1.0/24"
-  availability_zone = "us-east-2c"
+  availability_zone = "us-east-1c"
 
   tags = {
     name = "sub2"

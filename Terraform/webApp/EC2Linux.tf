@@ -2,6 +2,7 @@ provider "aws" {}
 
 resource "aws_instance" "web_server" {
     //east1 ami
+    name = "webserver"
     ami = "ami-09d95fab7fff3776c"
     //east2 ami
     //ami = "ami-0e84e211558a022c0"
@@ -11,7 +12,7 @@ resource "aws_instance" "web_server" {
     vpc_security_group_ids = ["${aws_security_group.lbGroup.id}"]
     associate_public_ip_address = true
 
-    //key_name = "temp"
+    key_name = "temp"
 
     lifecycle {
       create_before_destroy = true

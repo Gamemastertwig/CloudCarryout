@@ -6,3 +6,4 @@ s3Upload.sh
 .terraform.tfstate.lock.info
 terraform.tfstate
 terraform.tfstate.backup
+temp.pem
