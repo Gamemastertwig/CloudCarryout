@@ -5,4 +5,4 @@
 # (modified form script made by Neo)
 aws lambda create-function --function-name trigger-aws-batch-job --runtime go1.x \
     --zip-file fileb://main.zip --handler main \
-    --role arn:aws:iam::228340748802:role/LambdaS3Permissions
+    --role arn:aws:iam::[YOURAWSIDNUM]:role/LambdaS3Permissions
