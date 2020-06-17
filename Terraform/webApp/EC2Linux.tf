@@ -1,11 +1,22 @@
 provider "aws" {}
 
 resource "aws_instance" "web_server" {
-    ami = "ami-0e84e211558a022c0"
+    //east1 ami
+    ami = "ami-09d95fab7fff3776c"
+    //east2 ami
+    //ami = "ami-0e84e211558a022c0"
     instance_type = "t2.micro"
 
     subnet_id = "${aws_subnet.sub1.id}"
     vpc_security_group_ids = ["${aws_security_group.lbGroup.id}"]
+    associate_public_ip_address = true
+
+    //key_name = "temp"
+
+    lifecycle {
+      create_before_destroy = true
+    }
+
 }
 
 resource "aws_security_group" "lbGroup" {

@@ -1,11 +1,15 @@
 provider "aws" {}
 
 resource "aws_instance" "winApp" {
-    ami = "ami-0e84e211558a022c0"
+    //east1 ami
+    ami = ami-05bb2dae0b1de90b3
+    //east2 ami
+    //ami = "ami-0a83d9223efc49d62"
     instance_type = "t2.micro"
 
     subnet_id = "${aws_subnet.winsub.id}"
     vpc_security_group_ids = ["${aws_security_group.winsec.id}"]
+    associate_public_ip_address = true
 }
 
 resource "aws_security_group" "winsec" {
