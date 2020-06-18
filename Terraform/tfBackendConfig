@@ -1,0 +1,3 @@
+bucket = "cloud-carryout-repo2"
+key = "tfState"
+region = "us-east-1"

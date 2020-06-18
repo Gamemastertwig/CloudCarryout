@@ -85,3 +85,8 @@ resource "aws_subnet" "winsub2"{
     name = "winsub"
   }
 }
+
+terraform {
+    backend "s3" {
+    }
+}

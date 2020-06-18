@@ -56,3 +56,8 @@ resource "aws_security_group" "lbGroup" {
 output "instance_ip" {
     value=aws_instance.web_server.public_ip
 }
+
+terraform {
+    backend "s3" {
+    }
+}

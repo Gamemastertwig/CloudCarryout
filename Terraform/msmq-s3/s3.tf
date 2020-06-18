@@ -7,5 +7,10 @@ resource "aws_s3_bucket" "quebucket" {
     }
 }
 
+terraform {
+    backend "s3" {
+    }
+}
+
 
 
