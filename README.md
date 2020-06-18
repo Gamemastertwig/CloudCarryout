@@ -20,6 +20,12 @@ AWS S3 Bucket:
 Bucket need to store json.
 
 ## Need Setup
+**Terraform**
+This section covers setting up the terraform backend. This is so you can manage the infrastructure despite it being created remotely.
+- Go to the `Terraform` directory.
+- Open `tfBackendConfig`
+- Enter the correct `bucket` and `region` Note: This project currently only supports East-1
+
 **AWS Lambda Function**
 - cloudComputeApiLambda (Go)
 
@@ -130,7 +136,11 @@ Each section below should be completed in order. You can change the names sugges
 ## Provided (but may need edited)
 
 **Terraform Scripts**
-[insert list later]
+The terraform scripts are grouped into three templates. All three are set up to mange the tfstate in an s3.
+- webApp: This template provisions ec2, loadbalancer, and rds server running mysql. All three are located in a vpc. The ec2 can be accessed over ssh, and through the loadbalancer. The rds can only be accessed from the ec2 and loadbalancer.
+- windowsApp: This template provisions an ec2 running a windows ami, and rds running myspl. Both are on a vpc. The rds can only be accessed from the ec2.
+- msmq-s3: This template provisions a sqs instance and an s3.
+In order to manage the infrastructure, you must run `terraform init -backend-config=tfBackendConfig` in the same dirrectory as the `tfBackendConfig` and the scripts for the desired infrastructure.
 
 **Dockerfile**
 
