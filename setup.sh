@@ -22,7 +22,7 @@ func_terraform() {
     # folder stores the desired folder ($1 argument passed to func_terraform)
     folder=$1
     cd terraform/${folder}
-    terraform init
+    terraform init -backend-config=tfBackendConfig
     terraform apply -auto-approve
     aws s3 rm s3://${AWS_BUCKET}/${FILE_TO_WATCH}
     exit 0

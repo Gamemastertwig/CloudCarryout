@@ -26,15 +26,18 @@ RUN mkdir windowsApp
 RUN mkdir msmq
 
 # webApp
+COPY ./Terraform/tfBackendConfig /temp/terraform/webApp
 COPY ./Terraform/webApp/EC2Linux.tf /temp/terraform/webApp
 COPY ./Terraform/webApp/loadBalancer.tf /temp/terraform/webApp
 COPY ./Terraform/webApp/sqlLin.tf /temp/terraform/webApp
 
 # windowsApp
+COPY ./Terraform/tfBackendConfig /temp/terraform/windowsApp 
 COPY ./Terraform/windowsApp/ec2Win.tf /temp/terraform/windowsApp
 COPY ./Terraform/windowsApp/sqlWin.tf /temp/terraform/windowsApp
 
 # msmq
+COPY ./Terraform/tfBackendConfig /temp/terraform/msmq
 COPY ./Terraform/msmq-s3/que.tf /temp/terraform/msmq
 COPY ./Terraform/msmq-s3/s3.tf /temp/terraform/msmq
 
